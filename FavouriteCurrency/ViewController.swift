@@ -8,18 +8,49 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+    class ViewController: UITableViewController,CurrencyStoreDelegate {
+       
+        var currencyStore: CurrencyStore!
+        
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            
+            currencyStore = CurrencyStore(delegate: self)
+        }
+        
+        func newInfoArrived() {
+        self.tableView.reloadData()
+    }
+        
+        override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+            return currencyStore.count
+        }
+        
+        override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            let sectionObject = currencyStore[section]
+            return sectionObject.count
+        }
+        
+        override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+            let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
+            
+            
+            let currencyObject = currencyStore[indexPath.section]
+            let currency = currencyObject[indexPath.row]
+            cell.textLabel?.text = currency.base
+           // cell.detailTextLabel?.text = Currency.
+            
+            return cell
+        }
+        
+        override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+            let sectionObject = currencyStore[section]
+            return sectionObject.Currencyname
+        }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 
 
-}
+
+
 
